@@ -113,6 +113,13 @@ h2{font-size:.85rem;text-transform:uppercase;letter-spacing:.12em;color:var(--mu
 .cons button{flex:1;padding:11px;border-radius:999px;border:1px solid var(--fg);background:none;color:var(--fg);font:inherit;cursor:pointer;transition:.2s}
 .cons button.yes{background:var(--fg);color:var(--bg)}
 .cons button:hover{opacity:.8}
+.lbtn{border:1px solid var(--fg);border-radius:999px;padding:3px 12px;color:var(--fg);transition:.2s}
+.links .lbtn:hover{background:var(--fg);color:var(--bg)}
+.lbtn.in{padding:0;border:0;display:inline-flex;align-items:center}
+.lbtn img{width:30px;height:30px;border-radius:50%;display:block}
+.dc{margin:0 0 20px;font-size:.92rem;color:var(--muted)}
+.dc a{border-bottom:1px solid var(--accent);color:var(--fg);cursor:pointer}
+@media(max-width:560px){.links{gap:12px;font-size:.8rem}.lt{display:none}}
 .legal p{font-size:.95rem;color:var(--muted);margin:0 0 18px;line-height:1.7}
 .legal strong{color:var(--fg);font-weight:600}
 footer a{border-bottom:1px solid var(--line)}
@@ -124,11 +131,12 @@ footer{padding:36px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
 <header>
   <div class="wrap">
     <nav>
-      <a class="logo" href="#top"><span class="lg lg-s" aria-hidden="true"></span>Kobra · Lunar</a>
+      <a class="logo" href="#top"><span class="lg lg-s" aria-hidden="true"></span><span class="lt">Kobra · Lunar</span></a>
       <div class="links">
         <a href="#bewerbung">Bewerbung</a>
         <a href="#termine">Termine</a>
         <a href="#kontakt">Kontakt</a>
+        <a href="#termine" id="login" class="lbtn">Login</a>
       </div>
     </nav>
   </div>
@@ -175,6 +183,7 @@ footer{padding:36px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
     <section id="termine">
       <h2>Termine</h2>
       <div class="cal">
+        <p class="dc" id="dcbox"></p>
         <div class="cal-head"><button id="prev" aria-label="Voriger Monat">←</button><strong id="monthLabel"></strong><button id="next" aria-label="Nächster Monat">→</button></div>
         <div class="cal-grid" id="grid"></div>
         <div class="slots" id="slots"></div>
@@ -200,10 +209,10 @@ footer{padding:36px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
     <section id="datenschutz" class="legal">
       <h2>Datenschutz</h2>
       <p><strong>Verantwortlicher</strong><br>Fabian Manea, Forstern 21, 5274 Burgkirchen, Österreich, fabianskiieeb.info@gmail.com</p>
-      <p><strong>Cookies und Tracking</strong><br>Diese Seite setzt keine Cookies und verwendet keine Analyse- oder Werbe-Tools. In deinem Browser wird nur deine Auswahl zum Datenschutzhinweis gespeichert.</p>
+      <p><strong>Cookies und Tracking</strong><br>Diese Seite setzt keine Cookies und verwendet keine Analyse- oder Werbe-Tools. In deinem Browser wird deine Auswahl zum Datenschutzhinweis gespeichert. Wenn du dich mit Discord anmeldest, werden außerdem dein Discord-Name und dein Profilbild bis zum Schließen des Tabs im Session Storage abgelegt.</p>
       <p><strong>Hosting</strong><br>Beim Aufruf der Seite verarbeitet der Hosting-Anbieter technisch notwendige Daten (z. B. IP-Adresse und Zeitpunkt). Die Seite wird über GitHub Pages (GitHub Inc., USA) bereitgestellt. Weitere Informationen findest du in der Datenschutzerklärung von GitHub.</p>
       <p><strong>Terminanfragen und Kontakt</strong><br>Wenn du uns per E-Mail schreibst, verarbeiten wir deine Angaben nur, um deine Anfrage zu beantworten. Die Nachricht schreibst und sendest du selbst über dein E-Mail-Programm.</p>
-      <p><strong>Externe Links</strong><br>Beim Öffnen des Discord-Links gelten die Datenschutzbestimmungen von Discord.</p>
+      <p><strong>Externe Links</strong><br>Beim Öffnen des Discord-Links gelten die Datenschutzbestimmungen von Discord. Wenn du dich freiwillig mit Discord anmeldest, übermittelt Discord mit deiner Zustimmung deine Nutzer-ID, deinen Namen, dein Profilbild und die Information, ob du Mitglied auf unserem Server bist, an diese Seite. Wir speichern diese Daten nicht auf einem Server.</p>
       <p><strong>Deine Rechte</strong><br>Du kannst Auskunft, Berichtigung, Löschung und Einschränkung verlangen und dich bei der österreichischen Datenschutzbehörde (dsb.gv.at) beschweren.</p>
     </section>
   </div>
@@ -232,6 +241,44 @@ window.addEventListener("scroll",function(){if(!t){t=true;requestAnimationFrame(
 </script>
 <script>
 (function(){
+var CID='1564703849023930448',GID='1481303279588737088',RED='https://kobralunar.info/',K='dcUser',S='dcState';
+var lb=document.getElementById('login'),box=document.getElementById('dcbox');
+function ss(a,b){try{if(b===undefined)return sessionStorage.getItem(a);if(b===null)sessionStorage.removeItem(a);else sessionStorage.setItem(a,b);}catch(e){}return null;}
+function go(e){if(e)e.preventDefault();var s=Math.random().toString(36).slice(2)+Date.now().toString(36);ss(S,s);location.href='https://discord.com/oauth2/authorize?response_type=token&client_id='+CID+'&scope='+encodeURIComponent('identify guilds.members.read')+'&redirect_uri='+encodeURIComponent(RED)+'&state='+s;}
+function show(u){
+ box.innerHTML='';
+ if(u){
+  window.dcName=u.name;lb.className='lbtn in';lb.innerHTML='';
+  var im=document.createElement('img');im.alt=u.name;im.src=u.av;lb.appendChild(im);lb.title=u.name;
+  box.appendChild(document.createTextNode('Angemeldet als '+u.name+(u.member?' · Mitglied auf unserem Discord ✓':' · nicht auf unserem Discord')+' · '));
+  var o=document.createElement('a');o.textContent='Abmelden';o.onclick=function(){ss(K,null);location.reload();};box.appendChild(o);
+ }else{
+  window.dcName='';lb.className='lbtn';lb.textContent='Login';
+  var a=document.createElement('a');a.textContent='Mit Discord anmelden';a.onclick=go;box.appendChild(a);
+  box.appendChild(document.createTextNode(' (optional): Dein Discord-Name wird dann in die Terminanfrage eingetragen.'));
+ }
+}
+lb.onclick=function(e){if(lb.className.indexOf('in')<0)go(e);};
+var u=null;try{u=JSON.parse(ss(K));}catch(e){}
+show(u);
+var h=location.hash;
+if(h.indexOf('access_token=')>-1){
+ var p=new URLSearchParams(h.slice(1)),t=p.get('access_token'),st=p.get('state');
+ history.replaceState(null,'',location.pathname);
+ if(t&&st&&st===ss(S)){
+  var hd={headers:{Authorization:'Bearer '+t}};
+  fetch('https://discord.com/api/users/@me',hd).then(function(r){return r.json();}).then(function(d){
+   var name=d.global_name||d.username;
+   var av=d.avatar?'https://cdn.discordapp.com/avatars/'+d.id+'/'+d.avatar+'.png?size=64':'https://cdn.discordapp.com/embed/avatars/0.png';
+   return fetch('https://discord.com/api/users/@me/guilds/'+GID+'/member',hd).then(function(r){return r.ok;}).catch(function(){return false;}).then(function(m){
+    var o={name:name,av:av,member:m};ss(K,JSON.stringify(o));ss(S,null);show(o);location.hash='termine';});
+  }).catch(function(){});
+ }
+}
+})();
+</script>
+<script>
+(function(){
 var M=["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 var D=["Mo","Di","Mi","Do","Fr","Sa","So"];
 var T=["16:00","17:00","18:00","19:00","20:00"];
@@ -247,7 +294,7 @@ function update(){
   var txt=fmt(selD)+" um "+selT+" Uhr";
   sum.textContent="Gewählt: "+txt;
   req.setAttribute("aria-disabled","false");
-  msg="Hallo, ich möchte einen Termin am "+txt+" anfragen.";
+  msg="Hallo, ich möchte einen Termin am "+txt+" anfragen."+(window.dcName?" Mein Discord-Name: "+window.dcName+".":"");
   req.href="mailto:fabianskiieeb.info@gmail.com?subject="+encodeURIComponent("Terminanfrage")+"&body="+encodeURIComponent(msg);
   gm.href="https://mail.google.com/mail/?view=cm&to=fabianskiieeb.info@gmail.com&su="+encodeURIComponent("Terminanfrage")+"&body="+encodeURIComponent(msg);
   alt.className="alt";

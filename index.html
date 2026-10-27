@@ -120,7 +120,7 @@ footer{padding:36px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
 </style>
 </head>
 <body>
-<div class="notice" id="notice" role="status"><div class="track"><span>Hinweis: Vom 25.10. bis 26.10. nehmen wir keine Bewerbungen und Termine an – wegen Umbau sind wir ausgelastet. ✦</span><span>Hinweis: Vom 25.10. bis 26.10. nehmen wir keine Bewerbungen und Termine an – wegen Umbau sind wir ausgelastet. ✦</span><span>Hinweis: Vom 25.10. bis 26.10. nehmen wir keine Bewerbungen und Termine an – wegen Umbau sind wir ausgelastet. ✦</span><span>Hinweis: Vom 25.10. bis 26.10. nehmen wir keine Bewerbungen und Termine an – wegen Umbau sind wir ausgelastet. ✦</span></div></div>
+<div class="notice" id="notice" role="status"><div class="track"><span>Hinweis: Vom 28.10. bis 30.10. sind wir wegen Urlaub geschlossen und spielen keine Roleplay-Situationen aus. ✦</span><span>Hinweis: Vom 28.10. bis 30.10. sind wir wegen Urlaub geschlossen und spielen keine Roleplay-Situationen aus. ✦</span><span>Hinweis: Vom 28.10. bis 30.10. sind wir wegen Urlaub geschlossen und spielen keine Roleplay-Situationen aus. ✦</span><span>Hinweis: Vom 28.10. bis 30.10. sind wir wegen Urlaub geschlossen und spielen keine Roleplay-Situationen aus. ✦</span></div></div>
 <header>
   <div class="wrap">
     <nav>
@@ -224,7 +224,7 @@ function set(v){try{localStorage.setItem(k,v);}catch(e){}c.hidden=true;}
 if(!get())setTimeout(function(){c.hidden=false;},500);
 document.getElementById("yes").onclick=function(){set("yes");};
 document.getElementById("no").onclick=function(){set("no");};
-if(new Date()>=new Date(2026,9,27))document.getElementById("notice").hidden=true;
+if(new Date()>=new Date(2026,9,31))document.getElementById("notice").hidden=true;
 var w=document.getElementById("welcome"),wc=document.getElementById("wc"),t=false;
 function fade(){t=false;var y=Math.min(1,Math.max(0,window.scrollY/(w.offsetHeight*.7)));w.style.opacity=1-y;wc.style.transform="translateY("+(-y*40)+"px) scale("+(1-y*.04)+")";}
 window.addEventListener("scroll",function(){if(!t){t=true;requestAnimationFrame(fade);}},{passive:true});if(new Date()<new Date(2026,10,2))w.classList.add("hw");fade();
@@ -267,7 +267,7 @@ function render(){
  for(var i=0;i<first;i++)grid.appendChild(document.createElement("span"));
  for(var d=1;d<=days;d++){(function(d){
   var date=new Date(y,m,d),b=document.createElement("button");b.textContent=d;
-  if(date<today||(y===2026&&m===9&&(d===25||d===26)))b.disabled=true;
+  if(date<today||(y===2026&&m===9&&d>=28&&d<=30))b.disabled=true;
   if(+date===+today)b.className="today";
   if(selD&&+date===+selD)b.className="sel";
   b.onclick=function(){selD=date;selT=null;render();renderSlots();update();};
